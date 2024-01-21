@@ -109,92 +109,12 @@
   <div id="subtitle">
     <h2 style="color: #ff6666;">Computer Department - Second Year - 2024</h2>
   </div>
-  <table id="attendance">
-    <tr>
-      <th>Roll No</th>
-      <th>Student Name</th>
-      <th>Present</th>
-      <th>Absent</th>
-    </tr>
-    <!-- Generate 69 rows of data with buttons and input fields for student names -->
-    <script>
-      // Get the table element
-      let table = document.getElementById("attendance");
-
-      // Loop from 1 to 69
-      for (let i = 1; i <= 69; i++) {
-        // Create a new row element
-        let row = document.createElement("tr");
-
-        // Create a new cell element for the roll number
-        let cell1 = document.createElement("td");
-        // Set the text content to the roll number
-        cell1.textContent = i;
-        // Append the cell to the row
-        row.appendChild(cell1);
-
-        // Create a new cell element for the student name
-        let cellName = document.createElement("td");
-        // Create a new input element for the student name
-        let inputName = document.createElement("input");
-        // Set the type attribute to text
-        inputName.type = "text";
-        // Set the placeholder text
-        inputName.placeholder = "Enter Name";
-        // Append the input field to the cell
-        cellName.appendChild(inputName);
-        // Append the cell to the row
-        row.appendChild(cellName);
-
-        // Create a new cell element for the present button
-        let cell2 = document.createElement("td");
-        // Create a new button element
-        let button2 = document.createElement("button");
-        // Set the class name to "button present-button"
-        button2.className = "button present-button";
-        // Set the text content to "Present"
-        button2.textContent = "Present";
-        // Add an event listener to the button
-        button2.addEventListener("click", function() {
-          // Toggle the class name of the cell to "present"
-          cell2.classList.toggle("present");
-          // Remove the "absent" class from the cell
-          cell3.classList.remove("absent");
-          // Call the update result function when the button is clicked
-          updateResult();
-        });
-        // Append the button to the cell
-        cell2.appendChild(button2);
-        // Append the cell to the row
-        row.appendChild(cell2);
-
-        // Create a new cell element for the absent button
-        let cell3 = document.createElement("td");
-        // Create a new button element
-        let button3 = document.createElement("button");
-        // Set the class name to "button absent-button"
-        button3.className = "button absent-button";
-        // Set the text content to "Absent"
-        button3.textContent = "Absent";
-        // Add an event listener to the button
-        button3.addEventListener("click", function() {
-          // Toggle the class name of the cell to "absent"
-          cell3.classList.toggle("absent");
-          // Remove the "present" class from the cell
-          cell2.classList.remove("present");
-          // Call the update result function when the button is clicked
-          updateResult();
-        });
-        // Append the button to the cell
-        cell3.appendChild(button3);
-        // Append the cell to the row
-        row.appendChild(cell3);
-
-        // Append the row to the table
-        table.appendChild(row);
-      }
-    </script>
-  </table>
+  <div>
+    <label for="rowInput">Enter the number of rows:</label>
+    <input type="number" id="rowInput" min="1" value="10">
+    <button onclick="generateTable()">Generate Table</button>
+  </div>
+  <table id="attendance"></table>
   <div id="result">
     <p id="total-present">Total Present: 0</p>
     <p id="total-absent">Total Absent: 0</p>
@@ -205,88 +125,111 @@
     <p>Date and Time: <span id="datetime-value"></span></p>
   </div>
   <script>
-    // Get the result element
-    let result = document.getElementById("result");
+    // Get the table element
+    let table = document.getElementById("attendance");
 
-    // Get the total present element
-    let totalPresent = document.getElementById("total-present");
+    function generateTable() {
+      // Clear existing rows
+      table.innerHTML = "";
 
-    // Get the total absent element
-    let totalAbsent = document.getElementById("total-absent");
+      // Get the number of rows from the user input
+      let numRows = document.getElementById("rowInput").value;
 
-    // Get the absent list element
-    let absentList = document.getElementById("absent-list");
+      // Create the table header
+      let headerRow = document.createElement("tr");
+      let headerRollNo = document.createElement("th");
+      headerRollNo.textContent = "Roll No";
+      headerRow.appendChild(headerRollNo);
 
-    // Get the copy absent button
-    let copyAbsentButton = document.getElementById("copy-absent");
+      let headerName = document.createElement("th");
+      headerName.textContent = "Student Name";
+      headerRow.appendChild(headerName);
 
-    // Get the datetime element
-    let datetimeValue = document.getElementById("datetime-value");
+      let headerPresent = document.createElement("th");
+      headerPresent.textContent = "Present";
+      headerRow.appendChild(headerPresent);
 
-    // Create a function to update the result
+      let headerAbsent = document.createElement("th");
+      headerAbsent.textContent = "Absent";
+      headerRow.appendChild(headerAbsent);
+
+      table.appendChild(headerRow);
+
+      // Loop to generate rows
+      for (let i = 1; i <= numRows; i++) {
+        let row = document.createElement("tr");
+
+        let cellRollNo = document.createElement("td");
+        cellRollNo.textContent = i;
+        row.appendChild(cellRollNo);
+
+        let cellName = document.createElement("td");
+        let inputName = document.createElement("input");
+        inputName.type = "text";
+        inputName.placeholder = "Enter Name";
+        cellName.appendChild(inputName);
+        row.appendChild(cellName);
+
+        let cellPresent = document.createElement("td");
+        let buttonPresent = document.createElement("button");
+        buttonPresent.className = "button present-button";
+        buttonPresent.textContent = "Present";
+        buttonPresent.addEventListener("click", function() {
+          cellPresent.classList.toggle("present");
+          cellAbsent.classList.remove("absent");
+          updateResult();
+        });
+        cellPresent.appendChild(buttonPresent);
+        row.appendChild(cellPresent);
+
+        let cellAbsent = document.createElement("td");
+        let buttonAbsent = document.createElement("button");
+        buttonAbsent.className = "button absent-button";
+        buttonAbsent.textContent = "Absent";
+        buttonAbsent.addEventListener("click", function() {
+          cellAbsent.classList.toggle("absent");
+          cellPresent.classList.remove("present");
+          updateResult();
+        });
+        cellAbsent.appendChild(buttonAbsent);
+        row.appendChild(cellAbsent);
+
+        table.appendChild(row);
+      }
+
+      updateResult();
+    }
+
     function updateResult() {
-      // Initialize the present and absent counters
       let present = 0;
       let absent = 0;
-
-      // Initialize an empty array for the absent roll numbers
       let absentRollNo = [];
 
-      // Loop through the table rows
       for (let i = 1; i < table.rows.length; i++) {
-        // Get the current row
         let row = table.rows[i];
 
-        // Check if the cell has the class "present"
-        if (row.cells[3].classList.contains("present")) {
-          // Increment the present counter
+        if (row.cells[2].classList.contains("present")) {
           present++;
-        } else if (row.cells[4].classList.contains("absent")) {
-          // Increment the absent counter
+        } else if (row.cells[3].classList.contains("absent")) {
           absent++;
-          // Get the roll number from the first cell
           let rollNo = row.cells[0].textContent;
-          // Push the roll number to the absent roll number array
           absentRollNo.push(rollNo);
         }
       }
 
-      // Update the total present element with the present counter
-      totalPresent.textContent = "Total Present: " + present;
-
-      // Update the total absent element with the absent counter
-      totalAbsent.textContent = "Total Absent: " + absent;
-
-      // Update the absent list element with the absent roll number array
-      absentList.textContent = "Absent Roll No: " + absentRollNo.join(", ");
-
-      // Enable or disable the copy button based on the number of absent students
-      copyAbsentButton.disabled = absent === 0;
-
-      // Update the date and time
-      let now = new Date();
-      datetimeValue.textContent = now.toLocaleString();
+      document.getElementById("total-present").textContent = "Total Present: " + present;
+      document.getElementById("total-absent").textContent = "Total Absent: " + absent;
+      document.getElementById("absent-list").textContent = "Absent Roll No: " + absentRollNo.join(", ");
     }
 
-    // Function to copy absent roll numbers to the clipboard
     function copyAbsentRollNumbers() {
-      // Get the absent list text
-      let absentText = absentList.textContent.substring(14); // Remove "Absent Roll No: " prefix
-
-      // Create a temporary textarea element
+      let absentText = document.getElementById("absent-list").textContent.substring(14);
       let textarea = document.createElement("textarea");
-      // Set the value of the textarea to the absent roll numbers
       textarea.value = absentText;
-      // Append the textarea to the body
       document.body.appendChild(textarea);
-      // Select the text in the textarea
       textarea.select();
-      // Copy the selected text to the clipboard
       document.execCommand("copy");
-      // Remove the temporary textarea
       document.body.removeChild(textarea);
-
-      // Alert the user that the roll numbers have been copied
       alert("Absent roll numbers copied to clipboard: " + absentText);
     }
   </script>
